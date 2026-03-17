@@ -341,16 +341,25 @@ export default function CartPage({ cart, onUpdateQty, onRemove, onOpenProduct, o
                   <input type="text" placeholder="Promo code" />
                   <button className="cart-promo-btn">Apply</button>
                 </div>
+<button
+  className="cart-checkout-btn"
+  disabled={cart.length === 0 || !selectedAddress}
+  title={!selectedAddress ? "Please select a delivery address" : ""}
+  onClick={() => onCheckout && onCheckout({ address: selectedAddress, total, delivery })}
+>
+  <i className="fas fa-lock"></i>
+  {selectedAddress ? "Proceed to Checkout" : "Select an Address First"}
+</button>
 
-                <button
-                  className="cart-checkout-btn"
-                  disabled={cart.length === 0 || !selectedAddress}
-                  title={!selectedAddress ? "Please select a delivery address" : ""}
-                  onClick={() => onCheckout && onCheckout({ address: selectedAddress, total, delivery })}
-                >
-                  <i className="fas fa-lock"></i>
-                  {selectedAddress ? "Proceed to Checkout" : "Select an Address First"}
-                </button>
+{/* Login required hint */}
+{cart.length > 0 && !selectedAddress && (
+  <p style={{
+    fontSize: "12px", color: "#e63946", textAlign: "center",
+    marginTop: "8px", fontWeight: 600,
+  }}>
+    <i className="fas fa-info-circle"></i> Please add a delivery address to continue
+  </p>
+)}
 
                 <div className="cart-safe">
                   <i className="fas fa-shield-alt" style={{ color: "#16a34a" }}></i>

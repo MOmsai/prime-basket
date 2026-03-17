@@ -67,10 +67,14 @@ export default function App() {
   const goCart     = () => setPage("cart");
   const goWishlist = () => setPage("wishlist");
 
-  const goCheckout = (data) => {
-    setCheckoutData(data);
-    setPage("payment");
-  };
+const goCheckout = (data) => {
+  if (!isAuthenticated) {
+    setIsLoginModalOpen(true);
+    return;
+  }
+  setCheckoutData(data);
+  setPage("payment");
+};
 
   const handlePaymentSuccess = (order) => {
     const newOrder = {
