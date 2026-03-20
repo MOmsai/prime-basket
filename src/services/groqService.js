@@ -2,10 +2,10 @@
 // ALL product data comes live from Firebase Realtime Database.
 // Nothing is hardcoded. The system prompt is built dynamically from the DB.
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const GROQ_API_URL = import.meta.env.VITE_GROQ_API_URL;
-const GROQ_MODEL   = import.meta.env.VITE_GROQ_MODEL;
-const DB_URL       = import.meta.env.VITE_FIREBASE_DATABASE_URL;
+const GROQ_API_KEY = "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";
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL   = "llama-3.3-70b-versatile";
+const DB_URL       = "https://prime-basket-4f8fa-default-rtdb.firebaseio.com";
 
 // ── Category registry ─────────────────────────────────────────────────────────
 export const ALL_CATEGORIES = [
@@ -118,40 +118,40 @@ function detectRelevantCategories(userMessage) {
   const msg = userMessage.toLowerCase();
 
   const triggers = {
-    "rice":               ["rice","బియ్యం","రైస్","basmati","sona","ponni","steam rice","raw rice"],
-    "oil":                ["oil","నూనె","sunflower","olive","mustard","coconut","refined oil","cooking oil","groundnut"],
-    "wheat-flour":        ["wheat","flour","atta","maida","గోధుమ","పిండి","roti","chapati","bread flour"],
-    "salt":               ["salt","ఉప్పు","iodized","rock salt","sendha"],
-    "sugar":              ["sugar","చక్కెర","jaggery","gur","powdered","cane sugar"],
-    "chilli-powder":      ["chilli","chili","red chilli","మిర్చి","spicy","hot powder","mirchi"],
-    "turmeric-powder":    ["turmeric","పసుపు","haldi","yellow powder","manjal"],
-    "pulses":             ["dal","pulse","పప్పు","toor","moong","chana","masoor","lentil","urad","rajma","black gram","split"],
-    "masala":             ["masala","మసాలా","spice","garam","coriander","jeera","cumin","pepper","biryani masala","sambar powder","rasam"],
-    "fruits":             ["fruit","పండు","పండ్లు","apple","banana","mango","grape","orange","watermelon","strawberry","kiwi","papaya","guava","pomegranate","cherry"],
-    "vegetables":         ["vegetable","veggie","కూరగాయ","కూర","tomato","onion","potato","spinach","carrot","broccoli","capsicum","cabbage","cauliflower","garlic","ginger","cucumber","beans","bitter gourd","ridge gourd","ladies finger","okra","peas","drumstick"],
-    "dairyProducts":      ["dairy","పాల","milk","curd","paneer","butter","cream","ghee","cheese","yogurt","పెరుగు","నెయ్యి","buttermilk","lassi","tofu"],
+    "rice":               ["rice","mchele","basmati","sona","ponni","steam rice","raw rice"],
+    "oil":                ["oil","mafuta","sunflower","olive","mustard","coconut","refined oil","cooking oil","groundnut"],
+    "wheat-flour":        ["wheat","flour","atta","maida","unga","ngano","roti","chapati","bread flour"],
+    "salt":               ["salt","chumvi","iodized","rock salt","sendha"],
+    "sugar":              ["sugar","sukari","jaggery","gur","powdered","cane sugar"],
+    "chilli-powder":      ["chilli","chili","red chilli","pilipili","spicy","hot powder","mirchi"],
+    "turmeric-powder":    ["turmeric","manjano","haldi","yellow powder","manjal"],
+    "pulses":             ["dal","pulse","dengu","maharage","toor","moong","chana","masoor","lentil","urad","rajma","black gram","split"],
+    "masala":             ["masala","spice","garam","coriander","jeera","cumin","pepper","biryani masala","sambar powder","rasam"],
+    "fruits":             ["fruit","tunda","matunda","apple","banana","ndizi","mango","embe","grape","zabibu","orange","chungwa","watermelon","tikiti","strawberry","kiwi","papaya","papai","guava","pomegranate","cherry"],
+    "vegetables":         ["vegetable","veggie","mboga","tomato","nyanya","onion","vitunguu","potato","viazi","spinach","mchicha","carrot","karoti","broccoli","capsicum","cabbage","cauliflower","garlic","ginger","cucumber","beans","bitter gourd","okra","peas","drumstick"],
+    "dairyProducts":      ["dairy","maziwa","milk","curd","mtindi","paneer","butter","siagi","cream","ghee","cheese","jibini","yogurt","buttermilk","lassi","tofu"],
     "feminineHygiene":    ["feminine","sanitary","pad","napkin","tampon","feminine hygiene","women hygiene","period","menstrual"],
-    "homeNeeds":          ["home","household","cleaning","detergent","floor cleaner","toilet","broom","mop","dishwash","soap bar","laundry","fabric","phenyl","lizol","vim","harpic","గృహ"],
-    "babyCare":           ["baby","శిశు","diaper","nappy","baby food","baby powder","infant","toddler","బేబీ","cerelac","nestum","baby lotion","baby oil"],
-    "instantFood":        ["instant","maggi","noodle","pasta","soup","ready to eat","2 min","quick meal","oats instant","poha instant","upma","vermicelli"],
-    "milkPowders":        ["milk powder","horlicks","boost","bournvita","milo","pediasure","infant formula","lactogen","complan","nangrow","doodh powder"],
-    "chipsAndNamkeens":   ["chips","namkeen","snack","crisps","wafer","kurkure","lays","haldiram","స్నాక్","కర్కురే","bhujia","mixture","murukku","peanut","popcorn","fryums"],
-    "oralCare":           ["toothpaste","toothbrush","mouthwash","oral","dental","teeth","colgate","pepsodent","sensodyne","tongue cleaner","floss","whitening"],
-    "biscuitsAndCookies": ["biscuit","cookie","cracker","parle","britannia","oreo","digestive","marie","good day","bourbon","hide&seek","tiger biscuit","wafer","rusk","toast"],
-    "coolDrinks":         ["cool drink","soft drink","soda","cola","juice","pepsi","coke","sprite","fanta","7up","limca","maaza","frooti","appy","tropicana","real juice","drink","beverage","పానీయ","energy drink","nimbooz","thums up"],
-    "bodyCare":           ["body","skin","lotion","moisturizer","soap","shower","shampoo","hair","conditioner","face","cream","deodorant","perfume","వ్యక్తిగత","body wash","sunscreen","talcum","powder","dove","lux","pears","lifebuoy","dettol","savlon","head shoulders","pantene"],
+    "homeNeeds":          ["home","household","cleaning","detergent","floor cleaner","toilet","broom","ufagio","mop","dishwash","soap","laundry","fabric","phenyl","lizol","vim","harpic"],
+    "babyCare":           ["baby","mtoto","diaper","nappy","baby food","baby powder","infant","toddler","cerelac","nestum","baby lotion","baby oil"],
+    "instantFood":        ["instant","maggi","noodle","pasta","soup","ready to eat","2 min","quick meal","oats","poha","upma","vermicelli"],
+    "milkPowders":        ["milk powder","unga wa maziwa","horlicks","boost","bournvita","milo","pediasure","infant formula","lactogen","complan"],
+    "chipsAndNamkeens":   ["chips","namkeen","snack","crisps","wafer","kurkure","lays","haldiram","bhujia","mixture","murukku","peanut","popcorn","fryums"],
+    "oralCare":           ["toothpaste","toothbrush","mouthwash","oral","dental","teeth","meno","colgate","pepsodent","sensodyne","tongue cleaner","floss","whitening"],
+    "biscuitsAndCookies": ["biscuit","biskuti","cookie","cracker","parle","britannia","oreo","digestive","marie","good day","bourbon","wafer","rusk","toast"],
+    "coolDrinks":         ["cool drink","soft drink","soda","cola","juice","juisi","pepsi","coke","sprite","fanta","7up","maaza","frooti","tropicana","drink","beverage","kinywaji","energy drink"],
+    "bodyCare":           ["body","ngozi","skin","lotion","moisturizer","soap","sabuni","shower","shampoo","hair","nywele","conditioner","face","uso","cream","deodorant","perfume","body wash","sunscreen","talcum","dove","lux","pears","lifebuoy","dettol","savlon","head shoulders","pantene"],
   };
 
   // Cart/wishlist queries — handled separately, don't fetch products
-  const cartPatterns   = ["my cart","show cart","show my cart","what's in my cart","basket","what is in my cart","కార్ట్","నా కార్ట్"];
-  const wishPatterns   = ["my wishlist","my favorites","my wish","show wishlist","show favorites","wishlist","favorites","నా ఇష్టాలు"];
+  const cartPatterns   = ["my cart","show cart","show my cart","what's in my cart","basket","what is in my cart","mkokoteni wangu","onyesha mkokoteni"];
+  const wishPatterns   = ["my wishlist","my favorites","my wish","show wishlist","show favorites","wishlist","favorites","vipendwa vyangu","onyesha vipendwa"];
   if (cartPatterns.some(k => msg.includes(k))) return "CART";
   if (wishPatterns.some(k => msg.includes(k))) return "WISHLIST";
 
   // Broad queries — sample all categories
   const broadPatterns = [
-    "all","అన్ని","అన్నీ","everything","show me","what do you have",
-    "available","అందుబాటు","best","deals","offer","discount","list",
+    "all","vyote","kila kitu","everything","show me","what do you have",
+    "available","inapatikana","best","deals","offer","discount","list",
     "what products","what items","what do you sell","your products",
   ];
   if (broadPatterns.some(k => msg.includes(k))) return null;
@@ -257,7 +257,7 @@ Do NOT mention Groq, Llama, or Meta. You are PrimeBasket's own AI.
 STORE CATEGORIES: ${categoryList}
 
 LANGUAGE:
-- User writes Telugu → reply in Telugu
+- User writes Swahili → reply in Swahili
 - User writes English → reply in English
 - Product JSON "name" fields must ALWAYS be English
 
