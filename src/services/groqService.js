@@ -2,7 +2,7 @@
 // ALL product data comes live from Firebase Realtime Database.
 // Nothing is hardcoded. The system prompt is built dynamically from the DB.
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_MODEL   = "llama-3.3-70b-versatile";
 const DB_URL       = "https://prime-basket-4f8fa-default-rtdb.firebaseio.com";
@@ -113,7 +113,20 @@ export async function fetchAllProducts(forceRefresh = false) {
   }
 }
 
-// ── Detect which categories the user is asking about ─────────────────────────
+// ── Currency conversion ───────────────────────────────────────────────────────
+const INR_TO_KES = 1.5; // 1 INR ≈ 1.5 KES (approximate)
+
+function convertPrice(inrAmount, toKES) {
+  if (!toKES) return inrAmount;
+  return Math.round(inrAmount * INR_TO_KES);
+}
+
+function formatPrice(inrAmount, toKES) {
+  const amount = convertPrice(inrAmount, toKES);
+  return toKES ? `KSh ${amount}` : `₹${inrAmount}`;
+}
+
+
 function detectRelevantCategories(userMessage) {
   const msg = userMessage.toLowerCase();
 
@@ -192,7 +205,9 @@ export async function selectProductsForPrompt(userMessage) {
 }
 
 // ── Build system prompt ───────────────────────────────────────────────────────
-function buildSystemPrompt(products, cartItems = [], wishlistItems = []) {
+function buildSystemPrompt(products, cartItems = [], wishlistItems = [], language = "en") {
+  const toKES = language === "sw";
+  const cur = (amount) => formatPrice(amount, toKES);
   const starsDisplay = (n) => {
     if (n == null) return "★★★★☆";
     const full = Math.round(n);
@@ -212,9 +227,9 @@ function buildSystemPrompt(products, cartItems = [], wishlistItems = []) {
     const cartLines = cartItems.map(item => {
       const price = parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0;
       const qty   = item.quantity || item.qty || 1;
-      return `  - ${item.name} (${item.brand || ""}) x${qty} @ ₹${price} = ₹${(price * qty).toFixed(2)}`;
+      return `  - ${item.name} (${item.brand || ""}) x${qty} @ ₹${price} (${cur(price)}) = ${cur(price * qty)}`;
     }).join("\n");
-    cartSection = `USER'S CURRENT BASKET (${cartItems.length} item${cartItems.length !== 1 ? "s" : ""}, total ₹${cartTotal.toFixed(2)}):\n${cartLines}`;
+    cartSection = `USER'S CURRENT BASKET (${cartItems.length} item${cartItems.length !== 1 ? "s" : ""}, total ₹${cartTotal.toFixed(2)} / ${cur(cartTotal)}):\n${cartLines}`;
   }
 
   // ── Build wishlist section ──
@@ -223,7 +238,7 @@ function buildSystemPrompt(products, cartItems = [], wishlistItems = []) {
     wishlistSection = "USER'S WISHLIST / FAVORITES: Empty";
   } else {
     const wishLines = wishlistItems.map(item =>
-      `  - ${item.name} (${item.brand || ""}) @ ₹${parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0}`
+      `  - ${item.name} (${item.brand || ""}) @ ₹${parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0} (${cur(parseFloat(String(item.price || "0").replace(/[^0-9.]/g, "")) || 0)})`
     ).join("\n");
     wishlistSection = `USER'S WISHLIST / FAVORITES (${wishlistItems.length} item${wishlistItems.length !== 1 ? "s" : ""}):\n${wishLines}`;
   }
@@ -256,9 +271,11 @@ Do NOT mention Groq, Llama, or Meta. You are PrimeBasket's own AI.
 
 STORE CATEGORIES: ${categoryList}
 
-LANGUAGE:
-- User writes Swahili → reply in Swahili
-- User writes English → reply in English
+LANGUAGE & CURRENCY:
+- User writes Swahili → reply in Swahili, mention prices in KSh in your TEXT replies
+- User writes English → reply in English, mention prices in ₹ in your TEXT replies
+- CRITICAL: In JSON product blocks, price and oldPrice must ALWAYS be the raw INR number (e.g. 120, not 180). The UI will convert to KSh automatically. Never put KSh values in JSON.
+- When showing prices in KSh in text: multiply INR by 1.5 (e.g. ₹120 = KSh 180)
 - Product JSON "name" fields must ALWAYS be English
 
 ━━━ USER'S LIVE STATE ━━━
@@ -284,8 +301,9 @@ ${catalogSection}
 [{...}]
 \`\`\`
 \`\`\`action
-{"type":"ADD_TO_CART","products":[{...same list...}]}
+{"type":"ADD_TO_CART","products":[{...same list...}],"qty":1}
 \`\`\`
+Note: qty = number of units to add (default 1). If user says "add 3 rice" set qty:3.
 
 ③ ADD TO WISHLIST/FAVORITES — text + product block + action block:
 \`\`\`products
@@ -295,9 +313,15 @@ ${catalogSection}
 {"type":"ADD_TO_FAVORITES","products":[{...same list...}]}
 \`\`\`
 
-④ REMOVE FROM CART — text only + action block (no products block):
+④ REMOVE FROM CART (reduce quantity) — text only + action block:
 \`\`\`action
-{"type":"REMOVE_FROM_CART","products":[{"name":"EXACT_PRODUCT_NAME"}]}
+{"type":"REMOVE_FROM_CART","products":[{"name":"EXACT_PRODUCT_NAME"}],"qty":1}
+\`\`\`
+Note: qty = number of units to remove. Use qty:1 to reduce by 1. If user says "remove all [product]" use REMOVE_ALL_FROM_CART.
+
+④b REMOVE ALL OF A PRODUCT FROM CART — text only + action block:
+\`\`\`action
+{"type":"REMOVE_ALL_FROM_CART","products":[{"name":"EXACT_PRODUCT_NAME"}]}
 \`\`\`
 
 ⑤ REMOVE FROM WISHLIST — text only + action block:
@@ -324,7 +348,7 @@ ${catalogSection}
 
 ━━━ JSON RULES ━━━
 • name → exact English string from catalog (or exact name from cart/wishlist for remove actions)
-• price / oldPrice → plain number, no ₹
+• price / oldPrice → plain INR number, no ₹ or KSh symbol (e.g. 120 not "₹120" not "KSh 180")
 • badgeClass → "bs"=sale "bh"=hot "bn"=new "bo"=other ""=none
 • stars → ★ symbols e.g. "★★★★☆"
 • imageUrl → MUST be exact URL from catalog — never guess or invent
@@ -335,11 +359,11 @@ ${catalogSection}
 
 // ── Main export: send a chat message ─────────────────────────────────────────
 // Now accepts cartItems and wishlistItems so the AI knows what the user has
-export async function chatWithGroq(history, newMessage, cartItems = [], wishlistItems = []) {
+export async function chatWithGroq(history, newMessage, cartItems = [], wishlistItems = [], language = "en") {
   const products = await selectProductsForPrompt(newMessage);
 
   const messages = [
-    { role: "system", content: buildSystemPrompt(products, cartItems, wishlistItems) },
+    { role: "system", content: buildSystemPrompt(products, cartItems, wishlistItems, language) },
     ...history.slice(-6).map(m => ({
       role:    m.role === "bot" ? "assistant" : "user",
       content: m.content,
