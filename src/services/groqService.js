@@ -2,7 +2,7 @@
 // ALL product data comes live from Firebase Realtime Database.
 // Nothing is hardcoded. The system prompt is built dynamically from the DB.
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_MODEL   = "llama-3.3-70b-versatile";
 const DB_URL       = "https://prime-basket-4f8fa-default-rtdb.firebaseio.com";
@@ -120,7 +120,7 @@ function detectRelevantCategories(userMessage) {
   const triggers = {
     "rice":               ["rice","mchele","basmati","sona","ponni","steam rice","raw rice"],
     "oil":                ["oil","mafuta","sunflower","olive","mustard","coconut","refined oil","cooking oil","groundnut"],
-    "wheat-flour":        ["wheat","flour","atta","maida","unga","ngano","roti","chapati","bread flour"],
+    "wheat-flour":        ["wheat","flour","atta","maida","unga","ngano","maize","mahindi","maize flour","unga wa mahindi","corn flour","posho","ugali","roti","chapati","bread flour"],
     "salt":               ["salt","chumvi","iodized","rock salt","sendha"],
     "sugar":              ["sugar","sukari","jaggery","gur","powdered","cane sugar"],
     "chilli-powder":      ["chilli","chili","red chilli","pilipili","spicy","hot powder","mirchi"],
@@ -128,16 +128,16 @@ function detectRelevantCategories(userMessage) {
     "pulses":             ["dal","pulse","dengu","maharage","toor","moong","chana","masoor","lentil","urad","rajma","black gram","split"],
     "masala":             ["masala","spice","garam","coriander","jeera","cumin","pepper","biryani masala","sambar powder","rasam"],
     "fruits":             ["fruit","tunda","matunda","apple","banana","ndizi","mango","embe","grape","zabibu","orange","chungwa","watermelon","tikiti","strawberry","kiwi","papaya","papai","guava","pomegranate","cherry"],
-    "vegetables":         ["vegetable","veggie","mboga","tomato","nyanya","onion","vitunguu","potato","viazi","spinach","mchicha","carrot","karoti","broccoli","capsicum","cabbage","cauliflower","garlic","ginger","cucumber","beans","bitter gourd","okra","peas","drumstick"],
-    "dairyProducts":      ["dairy","maziwa","milk","curd","mtindi","paneer","butter","siagi","cream","ghee","cheese","jibini","yogurt","buttermilk","lassi","tofu"],
+    "vegetables":         ["vegetable","veggie","mboga","tomato","nyanya","onion","vitunguu","potato","viazi","spinach","mchicha","carrot","karoti","broccoli","capsicum","cabbage","kabichi","cauliflower","garlic","ginger","cucumber","beans","bitter gourd","okra","peas","drumstick","fresh vegetable"],
+    "dairyProducts":      ["dairy","maziwa","milk","mala","fermented milk","curd","mtindi","paneer","butter","siagi","cream","ghee","cheese","jibini","yogurt","buttermilk","lassi","tofu","chicken","kuku","beef","nyama","eggs","mayai","farm fresh","fresh chicken","fresh beef","meat","nyama choma"],
     "feminineHygiene":    ["feminine","sanitary","pad","napkin","tampon","feminine hygiene","women hygiene","period","menstrual"],
-    "homeNeeds":          ["home","household","cleaning","detergent","floor cleaner","toilet","broom","ufagio","mop","dishwash","soap","laundry","fabric","phenyl","lizol","vim","harpic"],
+    "homeNeeds":          ["home","household","cleaning","detergent","floor cleaner","toilet","toilet paper","karatasi ya choo","tissue","softcare","broom","ufagio","mop","dishwash","soap","laundry","fabric","phenyl","lizol","vim","harpic"],
     "babyCare":           ["baby","mtoto","diaper","nappy","baby food","baby powder","infant","toddler","cerelac","nestum","baby lotion","baby oil"],
-    "instantFood":        ["instant","maggi","noodle","pasta","soup","ready to eat","2 min","quick meal","oats","poha","upma","vermicelli"],
+    "instantFood":        ["instant","maggi","noodle","pasta","soup","ready to eat","2 min","quick meal","oats","poha","upma","vermicelli","bread","mkate","white bread","brown bread","daily bake","loaf"],
     "milkPowders":        ["milk powder","unga wa maziwa","horlicks","boost","bournvita","milo","pediasure","infant formula","lactogen","complan"],
     "chipsAndNamkeens":   ["chips","namkeen","snack","crisps","wafer","kurkure","lays","haldiram","bhujia","mixture","murukku","peanut","popcorn","fryums"],
     "oralCare":           ["toothpaste","toothbrush","mouthwash","oral","dental","teeth","meno","colgate","pepsodent","sensodyne","tongue cleaner","floss","whitening"],
-    "biscuitsAndCookies": ["biscuit","biskuti","cookie","cracker","parle","britannia","oreo","digestive","marie","good day","bourbon","wafer","rusk","toast"],
+    "biscuitsAndCookies": ["biscuit","biskuti","cookie","cracker","parle","britannia","oreo","digestive","marie","good day","bourbon","wafer","rusk","toast","cake","keki","chocolate cake","strawberry cake","vanilla cake","black forest","sweet treats","bakery","pastry"],
     "coolDrinks":         ["cool drink","soft drink","soda","cola","juice","juisi","pepsi","coke","sprite","fanta","7up","maaza","frooti","tropicana","drink","beverage","kinywaji","energy drink"],
     "bodyCare":           ["body","ngozi","skin","lotion","moisturizer","soap","sabuni","shower","shampoo","hair","nywele","conditioner","face","uso","cream","deodorant","perfume","body wash","sunscreen","talcum","dove","lux","pears","lifebuoy","dettol","savlon","head shoulders","pantene"],
   };
