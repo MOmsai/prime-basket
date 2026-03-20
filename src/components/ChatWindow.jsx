@@ -48,6 +48,23 @@ const SWAHILI_NAMES = {
   "Potato Chips": "Chips za Viazi",
   Bread: "Mkate",
   Cake: "Keki",
+  // ── New products ──
+  "Fresh Chicken": "Kuku Mbichi",
+  "Fresh Beef": "Nyama ya Ng'ombe Mbichi",
+  "Farm Fresh Eggs (12 pcs)": "Mayai Mapya (12)",
+  "Toilet Paper Roll (Pack of 2)": "Karatasi ya Choo (2)",
+  "Toilet Paper Roll (Single)": "Karatasi ya Choo (1)",
+  "Chocolate Cake": "Keki ya Chokoleti",
+  "Strawberry Cake": "Keki ya Stroberi",
+  "Vanilla Cake": "Keki ya Vanila",
+  "Black Forest Cake": "Keki ya Msitu Mweusi",
+  "White Bread": "Mkate Mweupe",
+  "Brown Bread": "Mkate wa Ngano",
+  "Fresh Cabbage": "Kabichi Mbichi",
+  "Mala Milk": "Maziwa ya Mala",
+  "Mala Fermented Milk": "Maziwa Yaliyochachushwa ya Mala",
+  "Unga Star Maize Flour": "Unga wa Mahindi wa Nyota",
+  "Maize Flour": "Unga wa Mahindi",
 };
 
 const SW = {
