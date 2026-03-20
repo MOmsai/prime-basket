@@ -341,25 +341,35 @@ function parsePrice(val) {
   return parseFloat(cleaned) || 0;
 }
 
+// ── Currency conversion: INR → KES ──
+const INR_TO_KES = 1.5;
+function toKES(inrAmount) { return Math.round(inrAmount * INR_TO_KES); }
+function displayPrice(inrAmount, isSwahili) {
+  return isSwahili ? `KSh ${toKES(inrAmount)}` : `₹${inrAmount.toFixed(2)}`;
+}
+
 // ── CartDisplay ────────────────────────────────────────────────────────────────
-function CartDisplay({ cartItems = [] }) {
+function CartDisplay({ cartItems = [], isSwahili = false }) {
   if (!cartItems.length) return (
     <div style={{ padding:"12px 14px", background:"#f0f9ff", borderRadius:"12px", border:"1.5px solid #bae6fd", fontSize:"13px", color:"#64748b", textAlign:"center" }}>
       🛒 Your cart is empty
     </div>
   );
   const total = cartItems.reduce((s, i) => s + (parsePrice(i.price)||0) * (i.quantity||i.qty||1), 0);
+  const totalDisplay = isSwahili ? `KSh ${toKES(total)}` : `₹${total.toFixed(2)}`;
   return (
     <div style={{ background:"linear-gradient(135deg,#f0f9ff,#e0f2fe)", border:"1.5px solid #7dd3fc", borderRadius:"16px", overflow:"hidden", marginTop:"8px" }}>
       <div style={{ padding:"10px 14px", background:"linear-gradient(135deg,#0369a1,#0ea5e9)", display:"flex", alignItems:"center", gap:"8px" }}>
         <span style={{ fontSize:"16px" }}>🛒</span>
         <span style={{ color:"white", fontWeight:800, fontSize:"13px" }}>Your Cart ({cartItems.length} item{cartItems.length!==1?"s":""})</span>
-        <span style={{ color:"rgba(255,255,255,0.85)", fontSize:"11px", marginLeft:"auto", fontWeight:700 }}>Total: ₹{total.toFixed(2)}</span>
+        <span style={{ color:"rgba(255,255,255,0.85)", fontSize:"11px", marginLeft:"auto", fontWeight:700 }}>Total: {totalDisplay}</span>
       </div>
       <div style={{ padding:"10px", display:"flex", flexDirection:"column", gap:"8px", maxHeight:"320px", overflowY:"auto" }}>
         {cartItems.map((item, i) => {
           const qty = item.quantity || item.qty || 1;
           const price = parsePrice(item.price) || 0;
+          const priceDisplay = isSwahili ? `KSh ${toKES(price)}` : `₹${price.toFixed(2)}`;
+          const lineDisplay = isSwahili ? `KSh ${toKES(price * qty)}` : `₹${(price * qty).toFixed(2)}`;
           return (
             <div key={i} style={{ display:"flex", alignItems:"center", gap:"10px", background:"white", borderRadius:"12px", padding:"8px 10px", boxShadow:"0 1px 6px rgba(0,0,0,0.07)" }}>
               <div style={{ width:"52px", height:"52px", borderRadius:"10px", overflow:"hidden", flexShrink:0, background:"#f1f5f9", border:"1px solid #e2e8f0" }}>
@@ -372,11 +382,11 @@ function CartDisplay({ cartItems = [] }) {
                 <div style={{ fontWeight:700, fontSize:"12.5px", color:"#1e293b", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.name}</div>
                 {item.brand && <div style={{ fontSize:"10.5px", color:"#64748b", marginTop:"1px" }}>{item.brand}</div>}
                 <div style={{ display:"flex", alignItems:"center", gap:"8px", marginTop:"4px" }}>
-                  <span style={{ fontSize:"12px", fontWeight:800, color:"#0369a1" }}>₹{price.toFixed(2)}</span>
+                  <span style={{ fontSize:"12px", fontWeight:800, color:"#0369a1" }}>{priceDisplay}</span>
                   <span style={{ fontSize:"11px", color:"#94a3b8" }}>× {qty}</span>
                 </div>
               </div>
-              <div style={{ fontSize:"13px", fontWeight:800, color:"#0ea5e9", flexShrink:0 }}>₹{(price*qty).toFixed(2)}</div>
+              <div style={{ fontSize:"13px", fontWeight:800, color:"#0ea5e9", flexShrink:0 }}>{lineDisplay}</div>
             </div>
           );
         })}
@@ -386,7 +396,7 @@ function CartDisplay({ cartItems = [] }) {
 }
 
 // ── WishlistDisplay ────────────────────────────────────────────────────────────
-function WishlistDisplay({ wishlistItems = [] }) {
+function WishlistDisplay({ wishlistItems = [], isSwahili = false }) {
   if (!wishlistItems.length) return (
     <div style={{ padding:"12px 14px", background:"#fff1f2", borderRadius:"12px", border:"1.5px solid #fda4af", fontSize:"13px", color:"#64748b", textAlign:"center" }}>
       ❤️ Your wishlist is empty
@@ -402,6 +412,8 @@ function WishlistDisplay({ wishlistItems = [] }) {
         {wishlistItems.map((item, i) => {
           const price = parsePrice(item.price) || 0;
           const oldPrice = parsePrice(item.oldPrice) || 0;
+          const priceDisplay = isSwahili ? `KSh ${toKES(price)}` : `₹${price.toFixed(2)}`;
+          const oldPriceDisplay = isSwahili ? `KSh ${toKES(oldPrice)}` : `₹${oldPrice.toFixed(2)}`;
           return (
             <div key={i} style={{ display:"flex", alignItems:"center", gap:"10px", background:"white", borderRadius:"12px", padding:"8px 10px", boxShadow:"0 1px 6px rgba(0,0,0,0.07)" }}>
               <div style={{ width:"52px", height:"52px", borderRadius:"10px", overflow:"hidden", flexShrink:0, background:"#f1f5f9", border:"1px solid #e2e8f0" }}>
@@ -414,8 +426,8 @@ function WishlistDisplay({ wishlistItems = [] }) {
                 <div style={{ fontWeight:700, fontSize:"12.5px", color:"#1e293b", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{item.name}</div>
                 {item.brand && <div style={{ fontSize:"10.5px", color:"#64748b", marginTop:"1px" }}>{item.brand}</div>}
                 <div style={{ display:"flex", alignItems:"center", gap:"6px", marginTop:"4px" }}>
-                  <span style={{ fontSize:"12px", fontWeight:800, color:"#e11d48" }}>₹{price.toFixed(2)}</span>
-                  {oldPrice > price && <span style={{ fontSize:"10px", color:"#94a3b8", textDecoration:"line-through" }}>₹{oldPrice.toFixed(2)}</span>}
+                  <span style={{ fontSize:"12px", fontWeight:800, color:"#e11d48" }}>{priceDisplay}</span>
+                  {oldPrice > price && <span style={{ fontSize:"10px", color:"#94a3b8", textDecoration:"line-through" }}>{oldPriceDisplay}</span>}
                 </div>
               </div>
             </div>
@@ -427,11 +439,11 @@ function WishlistDisplay({ wishlistItems = [] }) {
 }
 
 // ── ActionBanner ───────────────────────────────────────────────────────────────
-function ActionBanner({ action, products, cartItems = [], wishlistItems = [] }) {
+function ActionBanner({ action, products, cartItems = [], wishlistItems = [], isSwahili = false }) {
   if (!action) return null;
 
-  if (action.type === "SHOW_CART") return <CartDisplay cartItems={cartItems} />;
-  if (action.type === "SHOW_WISHLIST") return <WishlistDisplay wishlistItems={wishlistItems} />;
+  if (action.type === "SHOW_CART") return <CartDisplay cartItems={cartItems} isSwahili={isSwahili} />;
+  if (action.type === "SHOW_WISHLIST") return <WishlistDisplay wishlistItems={wishlistItems} isSwahili={isSwahili} />;
 
   const isCart = action.type === "ADD_TO_CART";
   const items = action.products?.length ? action.products : products;
@@ -782,13 +794,15 @@ function ProductCard({
           }}
         >
           <span style={{ fontSize: "15px", fontWeight: 900, color: "#0369a1" }}>
-            ₹{cartQty > 1 ? totalPrice.toFixed(2) : unitPrice.toFixed(2)}
+            {isSwahili
+              ? `KSh ${toKES(cartQty > 1 ? unitPrice * cartQty : unitPrice)}`
+              : `₹${cartQty > 1 ? totalPrice.toFixed(2) : unitPrice.toFixed(2)}`}
           </span>
           {cartQty > 1 && (
             <span
               style={{ fontSize: "10px", color: "#64748b", fontWeight: 600 }}
             >
-              (₹{unitPrice.toFixed(2)} × {cartQty})
+              ({isSwahili ? `KSh ${toKES(unitPrice)}` : `₹${unitPrice.toFixed(2)}`} × {cartQty})
             </span>
           )}
           {product.oldPrice && cartQty <= 1 && (
@@ -799,7 +813,7 @@ function ProductCard({
                 textDecoration: "line-through",
               }}
             >
-              ₹{Number(product.oldPrice).toFixed(2)}
+              {isSwahili ? `KSh ${toKES(Number(product.oldPrice))}` : `₹${Number(product.oldPrice).toFixed(2)}`}
             </span>
           )}
           {discount && discount > 0 && cartQty <= 1 && (
@@ -1189,7 +1203,7 @@ function MessageBubble({
       )}
       {!isUser && action && (
         <div style={{ width: "100%" }}>
-          <ActionBanner action={action} products={products} cartItems={cartItems} wishlistItems={wishlistItems} />
+          <ActionBanner action={action} products={products} cartItems={cartItems} wishlistItems={wishlistItems} isSwahili={isSwahili} />
         </div>
       )}
       {time && (
@@ -1266,11 +1280,17 @@ export default function ChatWindow({
     (action, products) => {
       if (!action) return;
       const items = action.products?.length ? action.products : products;
+      const qty = action.qty || 1; // how many units the user wants
       const te = voiceLangRef.current === "sw-KE";
 
       if (action.type === "ADD_TO_CART") {
         if (!items?.length) return;
-        items.forEach((p) => onAddToCart && onAddToCart(p));
+        items.forEach((p) => {
+          // Call onAddToCart `qty` times so the cart quantity increments correctly
+          for (let i = 0; i < qty; i++) {
+            onAddToCart && onAddToCart(p);
+          }
+        });
         showToast(
           te
             ? `Bidhaa ${items.length} zimeongezwa kwenye mkokoteni!`
@@ -1287,12 +1307,27 @@ export default function ChatWindow({
           "fav",
         );
       } else if (action.type === "REMOVE_FROM_CART") {
+        // Reduce quantity by `qty` units (not remove entirely)
         if (!items?.length) return;
-        items.forEach((p) => onRemoveAllFromCart && onRemoveAllFromCart(p));
+        items.forEach((p) => {
+          for (let i = 0; i < qty; i++) {
+            onRemoveFromCart && onRemoveFromCart(p);
+          }
+        });
         showToast(
           te
             ? `Bidhaa ${items.length} zimeondolewa kwenye mkokoteni!`
             : `${items.length} item${items.length !== 1 ? "s" : ""} removed from cart!`,
+          "remove",
+        );
+      } else if (action.type === "REMOVE_ALL_FROM_CART") {
+        // Remove the entire product regardless of quantity
+        if (!items?.length) return;
+        items.forEach((p) => onRemoveAllFromCart && onRemoveAllFromCart(p));
+        showToast(
+          te
+            ? `Bidhaa zimeondolewa kwenye mkokoteni!`
+            : `Item${items.length !== 1 ? "s" : ""} removed from cart!`,
           "remove",
         );
       } else if (action.type === "REMOVE_FROM_WISHLIST") {
@@ -1313,7 +1348,7 @@ export default function ChatWindow({
       }
       // SHOW_CART / SHOW_WISHLIST: display-only, rendered by ActionBanner — no side effects needed
     },
-    [onAddToCart, onToggleFavorite, onRemoveAllFromCart, onRemoveFromWishlist, onClearCart, showToast],
+    [onAddToCart, onToggleFavorite, onRemoveFromCart, onRemoveAllFromCart, onRemoveFromWishlist, onClearCart, showToast],
   );
 
   // Load messages when session changes
@@ -1369,7 +1404,7 @@ export default function ChatWindow({
           .map((m) => ({ role: m.role, content: m.content }));
 
         // ✅ Direct Groq API call — passes real cart + wishlist so AI knows user's state
-        const botContent = await chatWithGroq(history, text, cartItems || [], wishlistItems || []);
+        const botContent = await chatWithGroq(history, text, cartItems || [], wishlistItems || [], isSwahili ? "sw" : "en");
 
         // Save bot reply
         const saved = await saveBotMessage(sessionId, botContent);
