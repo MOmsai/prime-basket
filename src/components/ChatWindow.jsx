@@ -6,69 +6,69 @@ import {
   saveBotMessage,
 } from "../services/firebaseApi";
 
-// ── Telugu product name map ────────────────────────────────────────────────────
-const TELUGU_NAMES = {
-  Tomatoes: "టమోటాలు",
-  Onions: "ఉల్లిపాయలు",
-  Potatoes: "బంగాళాదుంపలు",
-  Spinach: "పాలకూర",
-  Broccoli: "బ్రొకలీ",
-  Carrots: "క్యారెట్లు",
-  Bananas: "అరటిపండ్లు",
-  "Red Apples": "ఎర్ర యాపిల్స్",
-  Mangoes: "మామిడిపండ్లు",
-  Grapes: "ద్రాక్షపండ్లు",
-  Watermelon: "పుచ్చకాయ",
-  Strawberries: "స్ట్రాబెర్రీలు",
-  "Full Cream Milk": "పూర్తి క్రీమ్ పాలు",
-  Curd: "పెరుగు",
-  Paneer: "పనీర్",
-  Butter: "వెన్న",
-  Eggs: "గుడ్లు",
-  Cheese: "చీజ్",
-  "Basmati Rice": "బాస్మతి బియ్యం",
-  "Whole Wheat Atta": "గోధుమ పిండి",
-  Oats: "వోట్స్",
-  Poha: "అటుకులు",
-  "Toor Dal": "కంది పప్పు",
-  "Moong Dal": "పెసర పప్పు",
-  "Chana Dal": "శనగ పప్పు",
-  "Turmeric Powder": "పసుపు పొడి",
-  "Red Chilli Powder": "ఎర్ర మిర్చి పొడి",
-  "Cumin Seeds": "జీలకర్ర",
-  "Garam Masala": "గరం మసాలా",
-  "Sunflower Oil": "సూర్యకాంతి నూనె",
-  "Olive Oil": "ఆలివ్ నూనె",
-  "Mustard Oil": "ఆవాల నూనె",
-  "Green Tea": "గ్రీన్ టీ",
-  "Instant Coffee": "ఇన్‌స్టంట్ కాఫీ",
-  "Orange Juice": "నారంజ రసం",
-  Biscuits: "బిస్కెట్లు",
-  "Maggi Noodles": "మేగీ నూడుల్స్",
-  "Potato Chips": "బంగాళాదుంప చిప్స్",
-  Bread: "బ్రెడ్",
-  Cake: "కేక్",
+// ── Swahili product name map ───────────────────────────────────────────────────
+const SWAHILI_NAMES = {
+  Tomatoes: "Nyanya",
+  Onions: "Vitunguu",
+  Potatoes: "Viazi",
+  Spinach: "Mchicha",
+  Broccoli: "Brokoli",
+  Carrots: "Karoti",
+  Bananas: "Ndizi",
+  "Red Apples": "Tofaa Nyekundu",
+  Mangoes: "Maembe",
+  Grapes: "Zabibu",
+  Watermelon: "Tikiti Maji",
+  Strawberries: "Stroberi",
+  "Full Cream Milk": "Maziwa Kamili",
+  Curd: "Mtindi",
+  Paneer: "Jibini Laini",
+  Butter: "Siagi",
+  Eggs: "Mayai",
+  Cheese: "Jibini",
+  "Basmati Rice": "Mchele wa Basmati",
+  "Whole Wheat Atta": "Unga wa Ngano",
+  Oats: "Shayiri",
+  Poha: "Mchele Bapa",
+  "Toor Dal": "Dengu za Toor",
+  "Moong Dal": "Dengu za Moong",
+  "Chana Dal": "Dengu za Chana",
+  "Turmeric Powder": "Unga wa Manjano",
+  "Red Chilli Powder": "Pilipili Nyekundu",
+  "Cumin Seeds": "Mbegu za Bizari",
+  "Garam Masala": "Garam Masala",
+  "Sunflower Oil": "Mafuta ya Alizeti",
+  "Olive Oil": "Mafuta ya Zeituni",
+  "Mustard Oil": "Mafuta ya Haradali",
+  "Green Tea": "Chai ya Kijani",
+  "Instant Coffee": "Kahawa ya Papo Hapo",
+  "Orange Juice": "Juisi ya Chungwa",
+  Biscuits: "Biskuti",
+  "Maggi Noodles": "Noodles za Maggi",
+  "Potato Chips": "Chips za Viazi",
+  Bread: "Mkate",
+  Cake: "Keki",
 };
 
-const TE = {
-  tryAsking: "ఇలా అడగండి",
-  soundOn: "🔊 శబ్దం ఆన్",
-  muted: "🔇 మ్యూట్",
-  placeholder: "అడగండి, కార్ట్‌కు జొడించండి...",
-  listening: "🎙️ వింటున్నాను... మాట్లాడండి",
-  poweredBy: "PrimeBasket AI ద్వారా",
-  productsFound: (n) => `${n} ఉత్పత్తులు దొరికాయి`,
-  addBtn: "జొడించు",
-  unavailable: "అందుబాటులో లేదు",
+const SW = {
+  tryAsking: "Jaribu kuuliza",
+  soundOn: "🔊 Sauti Imewashwa",
+  muted: "🔇 Kimya",
+  placeholder: "Uliza, ongeza kwenye mkokoteni...",
+  listening: "🎙️ Nasikiliza... sema sasa",
+  poweredBy: "Inaendeshwa na PrimeBasket AI",
+  productsFound: (n) => `Bidhaa ${n} zimepatikana`,
+  addBtn: "Ongeza",
+  unavailable: "Haipatikani",
   welcome: (
     <>
-      👋 నమస్కారం! నేను <strong>PrimeBot</strong>, మీ PrimeBasket సహాయకుడిని!
+      👋 Habari! Mimi ni <strong>PrimeBot</strong>, msaidizi wako wa PrimeBasket!
       <br />
       <br />
-      మీరు తెలుగులో లేదా English లో మాట్లాడవచ్చు 🎙️
+      Unaweza kuzungumza kwa Kiswahili au English 🎙️
       <br />
-      <strong>ఉత్పత్తులు చూపించు</strong>, <strong>కార్ట్‌కు జొడించు</strong>,
-      లేదా <strong>ఇష్టాలు సేవ్ చేయి</strong> — చెప్పండి!
+      <strong>Onyesha bidhaa</strong>, <strong>ongeza kwenye mkokoteni</strong>,
+      au <strong>hifadhi vipendwa</strong> — sema tu!
     </>
   ),
 };
@@ -87,7 +87,7 @@ const EN = {
       👋 Hey! I'm <strong>PrimeBot</strong>, your PrimeBasket grocery assistant!
       <br />
       <br />
-      మీరు తెలుగులో లేదా English లో మాట్లాడవచ్చు 🎙️
+      You can speak in Swahili or English 🎙️
       <br />
       <strong>show products</strong>, <strong>add to cart</strong>, or{" "}
       <strong>save favorites</strong> — just say it!
@@ -101,11 +101,11 @@ const SUGGESTIONS_EN = [
   { icon: "🔥", text: "What are the best deals?" },
   { icon: "🛒", text: "Add all items under ₹50 to cart" },
 ];
-const SUGGESTIONS_TE = [
-  { icon: "🥦", text: "ఏ కూరగాయలు అందుబాటులో ఉన్నాయి?" },
-  { icon: "🥛", text: "మీ దగ్గర ఏ పాల ఉత్పత్తులు ఉన్నాయి?" },
-  { icon: "🔥", text: "ఉత్తమ ఆఫర్లు ఏమిటి?" },
-  { icon: "🛒", text: "₹50 కంటే తక్కువ అన్ని వస్తువులు కార్ట్‌కు జొడించు" },
+const SUGGESTIONS_SW = [
+  { icon: "🥦", text: "Mboga gani zinapatikana?" },
+  { icon: "🥛", text: "Bidhaa gani za maziwa mna?" },
+  { icon: "🔥", text: "Orodhesha ofa bora" },
+  { icon: "🛒", text: "Ongeza vitu vyote chini ya ₹50 kwenye mkokoteni" },
 ];
 
 const BADGE_COLORS = {
@@ -147,7 +147,7 @@ function cleanForSpeech(text) {
   return text
     .replace(/```[\s\S]*?```/g, "")
     .replace(/[*_`#~>]/g, "")
-    .replace(/₹/g, "రూపాయలు ")
+    .replace(/₹/g, "shilingi ")
     .replace(/\n{2,}/g, ". ")
     .replace(/\n/g, " ")
     .replace(/\s{2,}/g, " ")
@@ -158,8 +158,8 @@ function speakText(text, lang) {
   const cleaned = cleanForSpeech(text);
   if (!cleaned) return;
 
-  if (lang === "te-IN" && window.responsiveVoice) {
-    // Telugu — use ResponsiveVoice
+  if (lang === "sw-KE" && window.responsiveVoice) {
+    // Swahili — use ResponsiveVoice
     window.responsiveVoice.cancel();
     window.responsiveVoice.speak(cleaned, "Indian English Female", {
       pitch: 1,
@@ -463,7 +463,7 @@ function ProductCard({
   isFav,
   cartQty,
   onShowToast,
-  isTelugu,
+  isSwahili,
 }) {
   const inStock = product.inStock !== false;
   const badgeStyle =
@@ -477,16 +477,16 @@ function ProductCard({
       ? product.price
       : parsePrice(product.price) || 0;
   const totalPrice = unitPrice * (cartQty || 1);
-  const teluguName = TELUGU_NAMES[product.name];
-  const L = isTelugu ? TE : EN;
+  const swahiliName = SWAHILI_NAMES[product.name];
+  const L = isSwahili ? SW : EN;
 
   const handleAdd = (e) => {
     e.stopPropagation();
     onAddToCart && onAddToCart(product);
     onShowToast &&
       onShowToast(
-        isTelugu
-          ? `${teluguName || product.name} కార్ట్‌కు జొడించబడింది!`
+        isSwahili
+          ? `${swahiliName || product.name} imeongezwa kwenye mkokoteni!`
           : `${product.name} added to cart!`,
         "cart",
       );
@@ -496,8 +496,8 @@ function ProductCard({
     onAddToCart && onAddToCart(product);
     onShowToast &&
       onShowToast(
-        isTelugu
-          ? `${teluguName || product.name} పరిమాణం ${(cartQty || 0) + 1}కు పెరిగింది!`
+        isSwahili
+          ? `${swahiliName || product.name} idadi imeongezwa hadi ${(cartQty || 0) + 1}!`
           : `${product.name} quantity increased to ${(cartQty || 0) + 1}!`,
         "cart",
       );
@@ -508,16 +508,16 @@ function ProductCard({
     if (cartQty <= 1)
       onShowToast &&
         onShowToast(
-          isTelugu
-            ? `${teluguName || product.name} కార్ట్ నుండి తీసివేయబడింది!`
+          isSwahili
+            ? `${swahiliName || product.name} imeondolewa kwenye mkokoteni!`
             : `${product.name} removed from cart!`,
           "remove",
         );
     else
       onShowToast &&
         onShowToast(
-          isTelugu
-            ? `${teluguName || product.name} పరిమాణం ${cartQty - 1}కు తగ్గింది!`
+          isSwahili
+            ? `${swahiliName || product.name} idadi imepunguzwa hadi ${cartQty - 1}!`
             : `${product.name} quantity decreased to ${cartQty - 1}!`,
           "remove",
         );
@@ -701,7 +701,7 @@ function ProductCard({
         >
           {product.name}
         </div>
-        {isTelugu && teluguName && (
+        {isSwahili && swahiliName && (
           <div
             style={{
               fontSize: "11.5px",
@@ -712,10 +712,10 @@ function ProductCard({
               lineHeight: 1.4,
             }}
           >
-            {teluguName}
+            {swahiliName}
           </div>
         )}
-        {!isTelugu && <div style={{ marginBottom: "4px" }} />}
+        {!isSwahili && <div style={{ marginBottom: "4px" }} />}
         {product.quantity && (
           <div
             style={{
@@ -945,9 +945,9 @@ function ProductRow({
   isFavorite,
   cartItems,
   onShowToast,
-  isTelugu,
+  isSwahili,
 }) {
-  const L = isTelugu ? TE : EN;
+  const L = isSwahili ? SW : EN;
   return (
     <div style={{ marginTop: "10px", width: "100%" }}>
       <div
@@ -1000,7 +1000,7 @@ function ProductRow({
                 isFav={isFavorite ? isFavorite(p.name) : false}
                 cartQty={cartQty}
                 onShowToast={onShowToast}
-                isTelugu={isTelugu}
+                isSwahili={isSwahili}
               />
             </div>
           );
@@ -1075,7 +1075,7 @@ function MessageBubble({
   wishlistItems,
   voiceLang,
   onShowToast,
-  isTelugu,
+  isSwahili,
 }) {
   if (!message || !message.role) return null;
   const isUser = message.role === "user";
@@ -1166,7 +1166,7 @@ function MessageBubble({
             isFavorite={isFavorite}
             cartItems={cartItems}
             onShowToast={onShowToast}
-            isTelugu={isTelugu}
+            isSwahili={isSwahili}
           />
         </div>
       )}
@@ -1208,12 +1208,12 @@ export default function ChatWindow({
   const [inputFocused, setInputFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [toast, setToast] = useState(null);
-  const [voiceLang, setVoiceLang] = useState("te-IN");
+  const [voiceLang, setVoiceLang] = useState("sw-KE");
   const [isMuted, setIsMuted] = useState(false);
 
-  const isTelugu = voiceLang === "te-IN";
-  const L = isTelugu ? TE : EN;
-  const SUGGESTIONS = isTelugu ? SUGGESTIONS_TE : SUGGESTIONS_EN;
+  const isSwahili = voiceLang === "sw-KE";
+  const L = isSwahili ? SW : EN;
+  const SUGGESTIONS = isSwahili ? SUGGESTIONS_SW : SUGGESTIONS_EN;
 
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
@@ -1249,14 +1249,14 @@ export default function ChatWindow({
     (action, products) => {
       if (!action) return;
       const items = action.products?.length ? action.products : products;
-      const te = voiceLangRef.current === "te-IN";
+      const te = voiceLangRef.current === "sw-KE";
 
       if (action.type === "ADD_TO_CART") {
         if (!items?.length) return;
         items.forEach((p) => onAddToCart && onAddToCart(p));
         showToast(
           te
-            ? `${items.length} వస్తువులు కార్ట్‌కు జొడించబడ్డాయి!`
+            ? `Bidhaa ${items.length} zimeongezwa kwenye mkokoteni!`
             : `${items.length} item${items.length !== 1 ? "s" : ""} added to cart!`,
           "cart",
         );
@@ -1265,7 +1265,7 @@ export default function ChatWindow({
         items.forEach((p) => onToggleFavorite && onToggleFavorite(p));
         showToast(
           te
-            ? `${items.length} వస్తువులు ఇష్టాలకు జొడించబడ్డాయి!`
+            ? `Bidhaa ${items.length} zimeongezwa kwenye vipendwa!`
             : `${items.length} item${items.length !== 1 ? "s" : ""} added to favorites!`,
           "fav",
         );
@@ -1274,7 +1274,7 @@ export default function ChatWindow({
         items.forEach((p) => onRemoveAllFromCart && onRemoveAllFromCart(p));
         showToast(
           te
-            ? `${items.length} వస్తువులు కార్ట్ నుండి తీసివేయబడ్డాయి!`
+            ? `Bidhaa ${items.length} zimeondolewa kwenye mkokoteni!`
             : `${items.length} item${items.length !== 1 ? "s" : ""} removed from cart!`,
           "remove",
         );
@@ -1283,14 +1283,14 @@ export default function ChatWindow({
         items.forEach((p) => onRemoveFromWishlist && onRemoveFromWishlist(p));
         showToast(
           te
-            ? `${items.length} వస్తువులు ఇష్టాల నుండి తీసివేయబడ్డాయి!`
+            ? `Bidhaa ${items.length} zimeondolewa kwenye vipendwa!`
             : `${items.length} item${items.length !== 1 ? "s" : ""} removed from wishlist!`,
           "remove",
         );
       } else if (action.type === "CLEAR_CART") {
         onClearCart && onClearCart();
         showToast(
-          te ? "కార్ట్ క్లియర్ చేయబడింది!" : "Cart cleared!",
+          te ? "Mkokoteni umefutwa!" : "Cart cleared!",
           "remove",
         );
       }
@@ -1368,8 +1368,8 @@ export default function ChatWindow({
         onNewMessage && onNewMessage();
       } catch (err) {
         console.error("Chat error:", err);
-        const errContent = isTelugu
-          ? "క్షమించండి, కనెక్ట్ కాలేదు. మళ్ళీ ప్రయత్నించండి."
+        const errContent = isSwahili
+          ? "Samahani, imeshindwa kuunganisha. Tafadhali jaribu tena."
           : "Sorry, I couldn't connect. Please try again.";
         setMessages((prev) => [
           ...prev,
@@ -1391,7 +1391,7 @@ export default function ChatWindow({
       messages,
       executeAction,
       onNewMessage,
-      isTelugu,
+      isSwahili,
       cartItems,
       wishlistItems,
     ],
@@ -1406,8 +1406,8 @@ export default function ChatWindow({
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) {
       setVoiceError(
-        isTelugu
-          ? "వాయిస్ సపోర్ట్ లేదు. Chrome వాడండి."
+        isSwahili
+          ? "Sauti haifanyi kazi. Tumia Chrome."
           : "Voice not supported. Use Chrome.",
       );
       return;
@@ -1440,18 +1440,18 @@ export default function ChatWindow({
       setListening(false);
       if (e.error === "not-allowed")
         setVoiceError(
-          isTelugu
-            ? "మైక్ బ్లాక్ అయింది. సెట్టింగ్స్‌లో అనుమతించండి."
+          isSwahili
+            ? "Maikrofoni imezuiwa. Ruhusu katika mipangilio ya kivinjari."
             : "Mic blocked. Allow mic in browser settings.",
         );
       else if (e.error === "no-speech")
         setVoiceError(
-          isTelugu
-            ? "మాట వినబడలేదు. మళ్ళీ ప్రయత్నించండి."
+          isSwahili
+            ? "Hakuna sauti iliyosikika. Jaribu tena."
             : "No speech detected. Try again.",
         );
       else
-        setVoiceError((isTelugu ? "వాయిస్ లోపం: " : "Voice error: ") + e.error);
+        setVoiceError((isSwahili ? "Hitilafu ya sauti: " : "Voice error: ") + e.error);
     };
     recognition.onend = () => setListening(false);
     recognition.start();
@@ -1549,8 +1549,8 @@ export default function ChatWindow({
             </div>
             <SpeakButton
               text={
-                isTelugu
-                  ? "నమస్కారం! నేను PrimeBot, మీ PrimeBasket సహాయకుడిని!"
+                isSwahili
+                  ? "Habari! Mimi ni PrimeBot, msaidizi wako wa PrimeBasket!"
                   : "Hey! I'm PrimeBot, your PrimeBasket grocery assistant!"
               }
               lang={voiceLang}
@@ -1639,7 +1639,7 @@ export default function ChatWindow({
                 wishlistItems={wishlistItems}
                 voiceLang={voiceLang}
                 onShowToast={showToast}
-                isTelugu={isTelugu}
+                isSwahili={isSwahili}
               />
             ) : null,
           )}
@@ -1728,7 +1728,7 @@ export default function ChatWindow({
               fontFamily: "Nunito,sans-serif",
             }}
           >
-            {isTelugu ? "ఆపు" : "Stop"}
+            {isSwahili ? "Simama" : "Stop"}
           </button>
         </div>
       )}
@@ -1774,7 +1774,7 @@ export default function ChatWindow({
           </button>
           <button
             className="lang-btn"
-            onClick={() => setVoiceLang("te-IN")}
+            onClick={() => setVoiceLang("sw-KE")}
             style={{
               padding: "3px 11px",
               borderRadius: "12px",
@@ -1782,12 +1782,12 @@ export default function ChatWindow({
               fontWeight: 700,
               fontFamily: "Nunito,sans-serif",
               border: "1.5px solid",
-              borderColor: isTelugu ? "#0369a1" : "#e2e8f0",
-              background: isTelugu ? "#e0f2fe" : "white",
-              color: isTelugu ? "#0369a1" : "#94a3b8",
+              borderColor: isSwahili ? "#0369a1" : "#e2e8f0",
+              background: isSwahili ? "#e0f2fe" : "white",
+              color: isSwahili ? "#0369a1" : "#94a3b8",
             }}
           >
-            🇮🇳 తెలుగు
+            🇰🇪 Kiswahili
           </button>
           <button
             className="lang-btn"
@@ -1799,9 +1799,9 @@ export default function ChatWindow({
               fontWeight: 700,
               fontFamily: "Nunito,sans-serif",
               border: "1.5px solid",
-              borderColor: !isTelugu ? "#0369a1" : "#e2e8f0",
-              background: !isTelugu ? "#e0f2fe" : "white",
-              color: !isTelugu ? "#0369a1" : "#94a3b8",
+              borderColor: !isSwahili ? "#0369a1" : "#e2e8f0",
+              background: !isSwahili ? "#e0f2fe" : "white",
+              color: !isSwahili ? "#0369a1" : "#94a3b8",
             }}
           >
             🇬🇧 English
@@ -1837,8 +1837,8 @@ export default function ChatWindow({
               listening
                 ? L.listening
                 : isDisabled
-                  ? isTelugu
-                    ? "చాట్ సిద్ధమవుతోంది..."
+                  ? isSwahili
+                    ? "Mazungumzo yanawekwa tayari..."
                     : "Setting up chat..."
                   : L.placeholder
             }
