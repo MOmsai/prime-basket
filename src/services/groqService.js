@@ -2,7 +2,7 @@
 // ALL product data comes live from Firebase Realtime Database.
 // Nothing is hardcoded. The system prompt is built dynamically from the DB.
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = "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";
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_MODEL   = "llama-3.3-70b-versatile";
 const DB_URL       = "https://prime-basket-4f8fa-default-rtdb.firebaseio.com";
