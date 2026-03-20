@@ -96,6 +96,7 @@ export default function ChatbotPage({
     if (onAddToCart) onAddToCart(ensureUid(product));
   };
 
+  // Reduce qty by 1 (called `qty` times from executeAction)
   const handleChatRemoveFromCart = (product) => {
     const existing = findCartItem(product);
     if (!existing) return;
@@ -106,6 +107,7 @@ export default function ChatbotPage({
     }
   };
 
+  // Remove entire product from cart regardless of quantity
   const handleChatRemoveAllFromCart = (product) => {
     const existing = findCartItem(product);
     if (existing) onRemoveFromCart && onRemoveFromCart(existing._uid);
